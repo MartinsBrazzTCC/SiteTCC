@@ -1,90 +1,184 @@
-# Loja das Bolinhas - TCC
+# Automação de Esteira - TCC
 
-Sistema automatizado de dispensação de produtos (bolinhas coloridas) usando Arduino, Node.js e uma interface web.
+Sistema de automação industrial que simula a dispensação de produtos através de uma esteira, controlada por uma interface web em tempo real.
 
-## 📋 Estrutura do Projeto
+## 🏭 Arquitetura do Sistema
 
-- **arduino_sketch.ino** - Código Arduino que controla os servos e motor da esteira
-- **server.js** - Backend Node.js que conecta o site ao Arduino via porta serial
-- **index.html** - Interface web (e-commerce)
+```
+┌─────────────────────┐
+│   SITE ONLINE       │
+│ (GitHub Pages)      │
+│ index.html          │
+└──────────┬──────────┘
+           │ JSON
+           ↓
+┌─────────────────────┐
+│  SERVIDOR NODE.JS   │
+│  server.js          │
+│ (seu computador)    │
+└──────────┬──────────┘
+           │ Serial
+           ↓
+┌─────────────────────┐
+│   ARDUINO MEGA      │
+│  arduino_sketch.ino │
+│                     │
+│ ├─ 4 Servos (cores)│
+│ └─ 1 Motor Esteira │
+└─────────────────────┘
+```
+
+## 📋 Arquivos do Projeto
+
+- **arduino_sketch.ino** - Código Arduino (controla servos e motor)
+- **server.js** - Servidor Node.js (intermedia site ↔ Arduino)
+- **index.html** - Interface web (acessa online)
 - **package.json** - Dependências Node.js
+- **README.md** - Este arquivo
+
+## 🔧 Componentes de Hardware
+
+- **Arduino Mega 2560**
+- **4 Servos** (empurradores das bolinhas) - Pinos 22, 24, 26, 28
+- **1 Servo TT** (motor da esteira) - Pino 30
+- **Bolinhas coloridas** (vermelho, azul, verde, amarelo)
+
+## ⚙️ Configuração Inicial
+
+### 1️⃣ Arduino (IDE do Arduino)
+
+1. Abra a **IDE do Arduino**
+2. Copie o código de `arduino_sketch.ino`
+3. Instale a biblioteca: **Sketch > Incluir Biblioteca > Gerenciar Bibliotecas**
+   - Procure por **ArduinoJson** (Benoit Blanchon)
+4. Conecte o Arduino via USB
+5. **Ferramentas > Porta** - anote a porta (COM3, COM5, /dev/ttyUSB0, etc)
+6. Carregue o código no Arduino
+
+### 2️⃣ Node.js (seu computador)
+
+1. Instale **Node.js** (https://nodejs.org)
+2. Abra o terminal na pasta do projeto
+3. Execute: `npm install`
+4. Edite `server.js` e altere:
+   ```javascript
+   const NOME_DA_PORTA = "COM3";   // ← Sua porta aqui
+   ```
+5. Execute: `npm start`
+   - Você verá: `✓ SERVIDOR RODANDO`
+
+### 3️⃣ Site Online
+
+1. O site já está em: **https://martinsbrazztcc.github.io/SiteTCC/**
+2. Com `npm start` rodando, você pode fazer compras
+3. O servidor enviará comandos ao Arduino
+4. Arduino controla os servos e a esteira
 
 ## 🚀 Como Usar
 
-### 1. Preparar o Arduino
+### Via Site Online:
 
-1. Abra a **IDE do Arduino** (https://www.arduino.cc/en/software)
-2. Copie o código de `arduino_sketch.ino`
-3. Vá em **Sketch > Incluir Biblioteca > Gerenciar Bibliotecas**
-4. Instale a biblioteca **ArduinoJson** (por Benoit Blanchon)
-5. Conecte seu Arduino ao computador
-6. Em **Ferramentas > Porta**, anote o nome da porta (ex: COM3, COM5)
-7. Faça upload do código para o Arduino
+1. Acesse: https://martinsbrazztcc.github.io/SiteTCC/
+2. Clique em "Ver Produto"
+3. Escolha a quantidade
+4. Clique em "Comprar"
+5. A esteira processa o pedido!
 
-### 2. Preparar o Node.js
+### Fluxo Completo:
 
-1. Instale o **Node.js** (https://nodejs.org)
-2. Abra o terminal/prompt na pasta do projeto
-3. Execute: `npm install`
-4. Abra o arquivo `server.js` e altere a linha:
-   ```javascript
-   const NOME_DA_PORTA = "COM3";   // Coloque a porta do seu Arduino aqui
-   ```
-5. Execute: `npm start`
-   - Você verá: `Servidor rodando em http://localhost:3000`
+```
+1. Usuário clica "Comprar" no site
+   ↓
+2. Site envia JSON: {"produto":"bola_vermelha","quantidade":2}
+   ↓
+3. Node.js recebe e valida
+   ↓
+4. Node.js envia pela serial ao Arduino
+   ↓
+5. Arduino recebe e executa:
+   - Servo vermelho empurra a bolinha
+   - Esteira transporta por 3 segundos
+   - Repete para quantidade solicitada
+   ↓
+6. Arduino envia resposta: {"status":"ok","enviado":2}
+   ↓
+7. Node.js retorna ao site
+   ↓
+8. Site mostra: "✓ Pedido enviado!"
+```
 
-### 3. Abrir o Site no Navegador
+## 🔌 Configuração de Pinos (Arduino Mega)
 
-1. Abra o arquivo `index.html` diretamente no navegador (duplo clique ou drag & drop)
-2. Ou, se quiser que o navegador abra automaticamente, coloque este código em um arquivo `.bat` (Windows):
-   ```batch
-   @echo off
-   start http://localhost:3000
-   start index.html
-   ```
-3. O site da "Loja das Bolinhas" abrirá normalmente
+| Componente | Pino | Função |
+|-----------|------|--------|
+| Servo Vermelho | 22 | Empurra bolinha vermelha |
+| Servo Azul | 24 | Empurra bolinha azul |
+| Servo Verde | 26 | Empurra bolinha verde |
+| Servo Amarelo | 28 | Empurra bolinha amarela |
+| Servo TT (Esteira) | 30 | Move a esteira |
 
-## 🎯 Fluxo de Funcionamento
+## ⏱️ Timings
 
-1. **Usuário** clica em "Ver Produto" e escolhe uma quantidade
-2. **Navegador** envia a solicitação para `server.js` via HTTP POST
-3. **Node.js** converte para JSON e envia ao Arduino pela porta serial
-4. **Arduino** recebe, controla os servos e motor da esteira
-5. **Arduino** responde com o status da operação
-6. **Node.js** retorna o resultado ao navegador
-7. **Navegador** exibe mensagem de sucesso/erro
+| Ação | Tempo |
+|------|-------|
+| Servo empurrando | 500 ms |
+| Acomodação da bolinha | 150 ms |
+| Esteira em movimento | 3000 ms (3 segundos) |
 
-## ⚙️ Configurações Importantes
+## 🧪 Troubleshooting
 
-- **Porta Serial**: Ajuste em `server.js` (linha com `NOME_DA_PORTA`)
-- **Velocidade Serial**: 9600 bps (igual no Arduino e Node.js)
-- **Tempo da Esteira**: 3000 ms (3 segundos) por bolinha
-- **Pinos do Arduino**:
-  - Servo Vermelho: Pino 9
-  - Servo Azul: Pino 10
-  - Servo Verde: Pino 11
-  - Servo Amarelo: Pino 12
-  - Motor Esteira: Pino 6
+### ❌ "Arduino não está conectado"
 
-## 📸 Imagens Necessárias
+- Verifique se o Arduino está conectado via USB
+- Confirme a porta em `server.js` (**Ferramentas > Porta** na IDE)
+- Tente outra porta USB
+- Reinicie o servidor: `npm start`
 
-Crie/coloque estas imagens na mesma pasta que o `index.html`:
-- `bola_vermelha.png`
-- `bola_azul.png`
-- `bola_verde.png`
-- `bola_amarela.png`
+### ❌ "Servidor não responde"
 
-## 🔧 Troubleshooting
+- Verifique se `npm start` está rodando
+- Confirme que Node.js está instalado: `node -v`
+- Verifique se a porta 3000 não está em uso
 
-**Mensagem: "Arduino não está conectado"**
-- Verifique se o Arduino está conectado ao USB
-- Confirme o nome da porta em `server.js`
-- Faça upload do código Arduino novamente
+### ❌ Servo não se mexe
 
-**Mensagem: "Servidor não responde"**
-- Verifique se rodou `npm start` com sucesso
-- Confirme que o Node.js está instalado: `node -v`
+- Verifique os pinos no Arduino (22, 24, 26, 28, 30)
+- Confirme se o código foi carregado corretamente
+- Teste com um comando simples via serial
 
-**JSON inválido no Arduino**
-- Verifique se a biblioteca ArduinoJson está instalada
-- Confirme que a taxa de baud é 9600
+### ❌ Imagens não aparecem no site
+
+- Faça upload das imagens no repositório GitHub:
+  - `bola_vermelha.png`
+  - `bola_azul.png`
+  - `bola_verde.png`
+  - `bola_amarela.png`
+
+## 📊 Status do Sistema
+
+Acesse `http://localhost:3000/status` para ver:
+- Status do servidor
+- Status da conexão Arduino
+- Porta configurada
+
+## 🎓 Para Apresentação do TCC
+
+1. **Prepare o Arduino** com o código carregado
+2. **Inicie o Node.js**: `npm start`
+3. **Acesse o site online** no navegador
+4. **Demonstre**: Clique em "Comprar" e mostre a esteira funcionando
+5. **Explique o fluxo** entre site, servidor e Arduino
+
+## 📝 Notas Importantes
+
+- O servidor Node.js **DEVE estar rodando** para o site funcionar
+- A comunicação é em **JSON** dos dois lados
+- O Arduino responde com status de sucesso ou erro
+- Máximo de 20 bolinhas por pedido
+
+## 📧 Suporte
+
+Se tiver dúvidas sobre o código ou funcionamento, revise:
+1. Comentários no código (bem explicados)
+2. Logs no terminal (mostram o que está acontecendo)
+3. Console do navegador (F12) para erros do site
