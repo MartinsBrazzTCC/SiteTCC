@@ -34,7 +34,7 @@
 // ======== ÂNGULOS E TIMINGS ========
 #define ANGULO_REPOUSO      0   // servo parado (não empurra)
 #define ANGULO_EMPURRAR     80    // servo empurra bolinha
-#define TEMPO_EMPURRAR_MS   500  // tempo na posição de empurrão
+#define TEMPO_EMPURRAR_MS   1000  // tempo na posição de empurrão
 #define TEMPO_ESTEIRA_MS    3000 // esteira roda 3s por bolinha
 
 // ======== VELOCIDADES DO SERVO TT ========
