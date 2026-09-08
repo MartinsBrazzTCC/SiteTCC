@@ -32,13 +32,13 @@
 #define PINO_SERVO_ESTEIRA  30
 
 // ======== ÂNGULOS E TIMINGS ========
-#define ANGULO_REPOUSO      90   // servo parado (não empurra)
-#define ANGULO_EMPURRAR     0    // servo empurra bolinha
+#define ANGULO_REPOUSO      0   // servo parado (não empurra)
+#define ANGULO_EMPURRAR     80    // servo empurra bolinha
 #define TEMPO_EMPURRAR_MS   500  // tempo na posição de empurrão
 #define TEMPO_ESTEIRA_MS    3000 // esteira roda 3s por bolinha
 
 // ======== VELOCIDADES DO SERVO TT ========
-#define SERVO_PARADO        90   // servo parado
+#define SERVO_PARADO        0   // servo parado
 #define SERVO_FRENTE        45   // servo girando (esteira andando)
 
 // Declaração dos servos
