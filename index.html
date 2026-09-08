@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loja das Bolinhas</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI, sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+}
+
+/* TOPO */
+
+header{
+    background:#1976d2;
+    color:white;
+    padding:20px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+}
+
+.busca{
+    width:400px;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+}
+
+/* CATÁLOGO */
+
+#catalogo{
+    padding:40px;
+}
+
+.produtos{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:25px;
+}
+
+.card{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.card img{
+    width:100%;
+    height:250px;
+    object-fit:cover;
+}
+
+.card-body{
+    padding:20px;
+}
+
+.card h3{
+    margin-bottom:15px;
+    color:#222;
+}
+
+.preco{
+    color:#1976d2;
+    font-size:28px;
+    font-weight:bold;
+    display:block;
+    margin-bottom:15px;
+}
+
+.btn{
+    width:100%;
+    border:none;
+    background:#1976d2;
+    color:white;
+    padding:12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.btn:hover{
+    background:#125aa3;
+}
+
+/* PRODUTO */
+
+#produto{
+    display:none;
+    padding:40px;
+}
+
+.produto-container{
+    display:flex;
+    gap:50px;
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.imagem{
+    width:500px;
+}
+
+.imagem img{
+    width:100%;
+    border-radius:10px;
+}
+
+.info{
+    flex:1;
+}
+
+.info h1{
+    font-size:36px;
+    margin-bottom:20px;
+}
+
+.info .preco{
+    font-size:42px;
+    margin-bottom:20px;
+}
+
+.descricao{
+    color:#555;
+    line-height:1.6;
+    margin-bottom:30px;
+}
+
+.qtd{
+    width:80px;
+    padding:10px;
+    margin-bottom:20px;
+    font-size:18px;
+}
+
+.btn-comprar{
+    border:none;
+    background:#1976d2;
+    color:white;
+    padding:15px 30px;
+    font-size:18px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.btn-comprar:hover{
+    background:#125aa3;
+}
+
+.btn-comprar:disabled{
+    background:#9bb8d3;
+    cursor:not-allowed;
+}
+
+.voltar{
+    margin-bottom:20px;
+    background:#444;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.status{
+    margin-top:20px;
+    font-weight:bold;
+}
+
+.status.sucesso{
+    color:#1976d2;
+}
+
+.status.erro{
+    color:#c62828;
+}
+
+.status.enviando{
+    color:#888;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Loja das Bolinhas</div>
+
+    <input
+        class="busca"
+        placeholder="Buscar bolinhas..."
+    >
+</header>
+
+<section id="catalogo">
+
+<div class="produtos">
+
+    <div class="card">
+        <img src="bola_vermelha.png">
+
+        <div class="card-body">
+            <h3>Bola Vermelha</h3>
+            <span class="preco">R$ 5,00</span>
+
+            <button class="btn"
+            onclick="abrirProduto(
+            'bola_vermelha',
+            'Bola Vermelha',
+            '5,00',
+            'bola_vermelha.png'
+            )">
+            Ver Produto
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="bola_azul.png">
+
+        <div class="card-body">
+            <h3>Bola Azul</h3>
+            <span class="preco">R$ 5,00</span>
+
+            <button class="btn"
+            onclick="abrirProduto(
+            'bola_azul',
+            'Bola Azul',
+            '5,00',
+            'bola_azul.png'
+            )">
+            Ver Produto
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="bola_verde.png">
+
+        <div class="card-body">
+            <h3>Bola Verde</h3>
+            <span class="preco">R$ 5,00</span>
+
+            <button class="btn"
+            onclick="abrirProduto(
+            'bola_verde',
+            'Bola Verde',
+            '5,00',
+            'bola_verde.png'
+            )">
+            Ver Produto
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="bola_amarela.png">
+
+        <div class="card-body">
+            <h3>Bola Amarela</h3>
+            <span class="preco">R$ 5,00</span>
+
+            <button class="btn"
+            onclick="abrirProduto(
+            'bola_amarela',
+            'Bola Amarela',
+            '5,00',
+            'bola_amarela.png'
+            )">
+            Ver Produto
+            </button>
+        </div>
+    </div>
+
+</div>
+
+</section>
+
+<section id="produto">
+
+<button class="voltar" onclick="voltarCatalogo()">
+← Voltar
+</button>
+
+<div class="produto-container">
+
+    <div class="imagem">
+        <img id="produtoImagem">
+    </div>
+
+    <div class="info">
+
+        <h1 id="produtoNome"></h1>
+
+        <span class="preco" id="produtoPreco"></span>
+
+        <p class="descricao">
+            Produto utilizado no sistema automatizado
+            de dispensação controlado por Arduino.
+        </p>
+
+        <input
+            type="number"
+            min="1"
+            value="1"
+            class="qtd"
+            id="quantidade"
+        >
+
+        <br>
+
+        <button
+            class="btn-comprar"
+            id="botaoComprar"
+            onclick="comprar()">
+            Comprar
+        </button>
+
+        <div id="status" class="status"></div>
+
+    </div>
+
+</div>
+
+</section>
+
+<script>
+
+const SERVIDOR_ARDUINO = "http://localhost:3000/comprar";
+
+let produtoAtual = "";
+
+function abrirProduto(id,nome,preco,img){
+
+    produtoAtual = id;
+
+    document.getElementById("catalogo").style.display="none";
+    document.getElementById("produto").style.display="block";
+
+    document.getElementById("produtoNome").innerText = nome;
+    document.getElementById("produtoPreco").innerText = "R$ " + preco;
+    document.getElementById("produtoImagem").src = img;
+
+    document.getElementById("status").innerHTML = "";
+    document.getElementById("status").className = "status";
+}
+
+function voltarCatalogo(){
+
+    document.getElementById("produto").style.display="none";
+    document.getElementById("catalogo").style.display="block";
+}
+
+async function comprar(){
+
+    const quantidade =
+        document.getElementById("quantidade").value;
+
+    const statusEl = document.getElementById("status");
+    const botao = document.getElementById("botaoComprar");
+
+    if (!quantidade || Number(quantidade) < 1) {
+        statusEl.className = "status erro";
+        statusEl.innerHTML = "✗ Informe uma quantidade válida";
+        return;
+    }
+
+    statusEl.className = "status enviando";
+    statusEl.innerHTML = "Enviando pedido para o Arduino...";
+    botao.disabled = true;
+
+    try{
+
+        const resposta = await fetch(SERVIDOR_ARDUINO, {
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+                produto:produtoAtual,
+                quantidade:Number(quantidade)
+            })
+
+        });
+
+        if (!resposta.ok) {
+            const erro = await resposta.text().catch(() => "");
+            throw new Error("Servidor respondeu com erro " + resposta.status + (erro ? (": " + erro) : ""));
+        }
+
+        const dados = await resposta.json().catch(() => ({}));
+
+        statusEl.className = "status sucesso";
+        statusEl.innerHTML = "✓ Pedido enviado! " + (dados.mensagem || "O Arduino está processando.");
+
+    }catch(erro){
+
+        console.error("Falha ao comunicar com o Arduino:", erro);
+
+        statusEl.className = "status erro";
+        statusEl.innerHTML =
+            "✗ Não foi possível falar com o Arduino. " +
+            "Verifique se o servidor local (server.js) está rodando " +
+            "e se o Arduino está conectado. Detalhe: " + erro.message;
+    } finally {
+        botao.disabled = false;
+    }
+}
+
+</script>
+
+</body>
+</html>
